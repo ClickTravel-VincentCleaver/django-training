@@ -32,7 +32,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         ingredients_data = validated_data.pop('ingredients', [])
         recipe = super().update(instance, validated_data)
 
-        recipe.ingredients.all.delete()
+        recipe.ingredients.all().delete()
         for ingredient in ingredients_data:
             Ingredient.objects.create(recipe=recipe, **ingredient)
         return recipe
