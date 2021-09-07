@@ -19,8 +19,8 @@ def recipe_url(recipe_id):
 
 def given_recipe_exists(**params):
     defaults = {
-        'name': 'MOCK_NAME',
-        'description': 'MOCK_DESCRIPTION'
+        'name': 'MOCK_RECIPE_NAME',
+        'description': 'MOCK_RECIPE_DESCRIPTION'
     }
     defaults.update(params)
     return Recipe.objects.create(**defaults)
@@ -28,7 +28,7 @@ def given_recipe_exists(**params):
 
 def given_ingredient_exists(recipe, **params):
     defaults = {
-        'name': 'MOCK_NAME',
+        'name': 'MOCK_INGREDIENT_NAME',
     }
     defaults.update(params)
     return Ingredient.objects.create(recipe=recipe, **defaults)
@@ -41,7 +41,7 @@ class PublicRecipeApiTests(TestCase):
         self.client = APIClient()
 
     def test_get_recipes(self):
-        """Test GET recipes"""
+        """Test GET recipes/"""
 
         # Given
         given_recipe_exists(name='Eggs Benedict')
@@ -157,6 +157,8 @@ class PublicRecipeApiTests(TestCase):
         # Then the recipe is updated
         recipe.refresh_from_db()
         self.assertEqual(recipe.description, new_description)
+
+        # Then the ingredients are also updated
         self.assertEqual(len(recipe.ingredients.all()), 1)
         self.assertEqual(recipe.ingredients.all()[0].name, new_ingredient_name)
 
