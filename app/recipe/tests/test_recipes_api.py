@@ -84,11 +84,19 @@ class PublicRecipeApiTests(TestCase):
         # Given
         payload = {
             'name': 'Gnocchi',
-            'description': 'Basically potatoes but better'
+            'description': 'Basically potatoes but better',
+            'ingredients': [
+                {'name': 'potatoes'},
+                {'name': 'flour'},
+                {'name': 'eggs'},
+            ]
         }
 
         # When
-        response = self.client.post(RECIPES_URL, payload)
+        response = self.client.post(
+            RECIPES_URL,
+            payload,
+        )
 
         # Then the request is successful
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -98,6 +106,7 @@ class PublicRecipeApiTests(TestCase):
         self.assertIsNotNone(recipe)
         self.assertEqual(recipe.name, payload['name'])
         self.assertEqual(recipe.description, payload['description'])
+        self.assertEqual(recipe.ingredients.all().count(), 3)
 
     def test_delete_recipe(self):
         """Test DELETE /recipes/{id} for existing recipe"""
