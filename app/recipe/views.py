@@ -5,8 +5,15 @@ from recipe import serializers
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    queryset = Recipe.objects.all()
     serializer_class = serializers.RecipeSerializer
+
+    def get_queryset(self):
+        """Get recipe objects including filter"""
+        name = self.request.query_params.get('name')
+        queryset = Recipe.objects.all()
+        if name:
+            queryset = Recipe.objects.filter(name__icontains=name)
+        return queryset
 
     def perform_create(self, serializer):
         """Create a new Recipe object"""

@@ -58,6 +58,46 @@ class PublicRecipeApiTests(TestCase):
         serializer = RecipeSerializer(expected_recipes, many=True)
         self.assertEqual(response.data, serializer.data)
 
+    def test_get_recipes_by_name_filter(self):
+        """Test GET recipes/?name=xyz"""
+
+        # Given
+        included_recipe1 = given_recipe_exists(name='Strawberry trifle')
+        excluded_recipe = given_recipe_exists(name='Orange trifle')
+        included_recipe2 = given_recipe_exists(name='Raspberry trifle')
+
+        # When
+        name_filter = 'berry'
+        response = self.client.get(RECIPES_URL, {'name': name_filter})
+
+        # Then the request is successful
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Then the response contains the filtered recipes
+        filtered_recipes = response.data
+        self.assertEqual(len(filtered_recipes), 2)
+        self.assertIn(RecipeSerializer(included_recipe1).data, response.data)
+        self.assertIn(RecipeSerializer(included_recipe2).data, response.data)
+        self.assertNotIn(RecipeSerializer(excluded_recipe).data, response.data)
+
+    def test_get_recipes_by_name_filter_no_match(self):
+        """Test GET recipes/?name=xyz with no match found"""
+
+        # Given
+        given_recipe_exists(name='Strawberry trifle')
+        given_recipe_exists(name='Raspberry trifle')
+
+        # When
+        name_filter = 'chocolate'
+        response = self.client.get(RECIPES_URL, {'name': name_filter})
+
+        # Then the request is successful
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Then the response contains no recipes
+        filtered_recipes = response.data
+        self.assertEqual(len(filtered_recipes), 0)
+
     def test_get_recipe(self):
         """Test GET recipes/{id} for existing recipe"""
 
