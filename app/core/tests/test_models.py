@@ -7,10 +7,6 @@ from recipe.tests.test_recipes_api import given_recipe_exists
 
 class ModelTests(TestCase):
 
-    # -------------------------------
-    # model: RECIPE
-    # -------------------------------
-
     def test_recipe_str(self):
         """Test the recipe string representation"""
         recipe = models.Recipe.objects.create(
@@ -19,10 +15,6 @@ class ModelTests(TestCase):
         )
 
         self.assertEqual(str(recipe), recipe.name)
-
-    # -------------------------------
-    # model: INGREDIENT
-    # -------------------------------
 
     def test_ingredient_str(self):
         """Test the ingredient string representation"""

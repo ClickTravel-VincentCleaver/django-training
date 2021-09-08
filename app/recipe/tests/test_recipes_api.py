@@ -13,7 +13,7 @@ RECIPES_URL = reverse('recipe:recipe-list')
 
 
 def recipe_url(recipe_id):
-    """Construct URL for a single recipe based on its UUID"""
+    """Construct URL for a single recipe based on its ID"""
     return reverse('recipe:recipe-detail', args=[recipe_id])
 
 
@@ -73,11 +73,13 @@ class PublicRecipeApiTests(TestCase):
         # Then the request is successful
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        # Then the response contains the filtered recipes
+        # Then the response contains matching recipes
         filtered_recipes = response.data
         self.assertEqual(len(filtered_recipes), 2)
         self.assertIn(RecipeSerializer(included_recipe1).data, response.data)
         self.assertIn(RecipeSerializer(included_recipe2).data, response.data)
+
+        # Then the response does not contain non-matching recipes
         self.assertNotIn(RecipeSerializer(excluded_recipe).data, response.data)
 
     def test_get_recipes_by_name_filter_no_match(self):
