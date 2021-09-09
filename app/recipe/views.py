@@ -12,7 +12,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         name = self.request.query_params.get('name')
         queryset = Recipe.objects.all().order_by('name')
         if name:
-            queryset = Recipe.objects.filter(name__icontains=name).order_by('name')
+            queryset = Recipe.objects.filter(name__icontains=name)\
+                .order_by('name')
         return queryset
 
     def perform_create(self, serializer):
