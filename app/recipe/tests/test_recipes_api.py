@@ -54,9 +54,8 @@ class PublicRecipeApiTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Then the response contains the recipes
-        expected_recipes = Recipe.objects.all()
-        serializer = RecipeSerializer(expected_recipes, many=True)
-        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.data[0]['name'], 'Eggs Benedict')
+        self.assertEqual(response.data[1]['name'], 'Ham Egg and Chips')
 
     def test_get_recipes_by_name_filter(self):
         """Test GET recipes/?name=xyz"""
