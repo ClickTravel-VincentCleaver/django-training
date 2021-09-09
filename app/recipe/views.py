@@ -10,9 +10,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Get recipe objects including filter"""
         name = self.request.query_params.get('name')
-        queryset = Recipe.objects.all()
+        queryset = Recipe.objects.all().order_by('name')
         if name:
-            queryset = Recipe.objects.filter(name__icontains=name)
+            queryset = Recipe.objects.filter(name__icontains=name).order_by('name')
         return queryset
 
     def perform_create(self, serializer):

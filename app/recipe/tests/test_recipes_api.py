@@ -202,7 +202,7 @@ class PublicRecipeApiTests(TestCase):
 
         # Then the ingredients are also updated
         self.assertEqual(len(recipe.ingredients.all()), 1)
-        self.assertEqual(recipe.ingredients.all()[0].name, new_ingredient_name)
+        self.assertEqual(recipe.ingredients.first().name, new_ingredient_name)
 
     def test_delete_recipe(self):
         """Test DELETE /recipes/{id} for existing recipe and ingredients"""
