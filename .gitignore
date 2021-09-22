@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/.idea
+/.env
+/.travis.yml
+/app/.DS_Store
